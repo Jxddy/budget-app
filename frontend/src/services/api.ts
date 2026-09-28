@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+const API_URL = import.meta.env.VITE_API_URL || 'https://budget-app-backend-9i0s.onrender.com/api/v1';
 
 // Créer l'instance Axios
 const api: AxiosInstance = axios.create({
