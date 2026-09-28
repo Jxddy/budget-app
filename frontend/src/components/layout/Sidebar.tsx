@@ -58,53 +58,53 @@ export const Sidebar: React.FC = () => {
       {/* Mobile overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => dispatch(toggleSidebar())}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar fixée à gauche */}
       <aside
         className={clsx(
-          'fixed top-0 left-0 h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 w-64 z-50 transition-transform duration-300',
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
-          'lg:translate-x-0 lg:static'
+          'fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out flex flex-col',
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-primary-600">Budget Manager</h2>
+        {/* Logo Header */}
+        <div className="h-16 px-6 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+            M
           </div>
+          <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+            MyFinan
+          </span>
+        </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
-            {navigation.map((item) => (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                onClick={() => dispatch(toggleSidebar())}
-                className={({ isActive }) =>
-                  clsx(
-                    'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-                    isActive
-                      ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-                      : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
-                  )
-                }
-              >
-                {item.icon}
-                <span className="font-medium">{item.name}</span>
-              </NavLink>
-            ))}
-          </nav>
+        {/* Navigation Links */}
+        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+          {navigation.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.href}
+              onClick={() => dispatch(toggleSidebar())}
+              className={({ isActive }) =>
+                clsx(
+                  'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all text-sm',
+                  isActive
+                    ? 'bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300 font-semibold shadow-xs'
+                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700/50'
+                )
+              }
+            >
+              {item.icon}
+              <span>{item.name}</span>
+            </NavLink>
+          ))}
+        </nav>
 
-          {/* Footer */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              © 2026 Budget Manager
-            </p>
-          </div>
+        {/* Footer */}
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-400 text-center">
+          © 2026 MyFinan App
         </div>
       </aside>
     </>
