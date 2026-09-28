@@ -9,7 +9,6 @@ import DashboardPage from './pages/DashboardPage';
 import BudgetsPage from './pages/BudgetsPage';
 import TransactionsPage from './pages/TransactionsPage';
 import Toast from './components/common/Toast';
-import Spinner from './components/common/Spinner';
 
 export default function App() {
   const { isAuthenticated, loading } = useAppSelector((state) => state.auth);
@@ -17,7 +16,7 @@ export default function App() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Spinner size="lg" />
+        <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
