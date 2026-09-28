@@ -23,7 +23,7 @@ export const BudgetsPage: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchBudgets({ page: 1, limit: 50 }));
+    dispatch(fetchBudgets(false));
   }, [dispatch]);
 
   const handleCreateBudget = async () => {
@@ -37,12 +37,16 @@ export const BudgetsPage: React.FC = () => {
 
     setCreateLoading(true);
     try {
-      await dispatch(createBudget({
-        name: formData.name,
-        amount: parseFloat(formData.amount),
-        month: formData.month,
-        year: formData.year,
-      })).unwrap();
+          // AVANT (buggé) :
+          // amount: parseFloat(formData.amount),
+          
+          // APRÈS (corrigé avec totalAmount) :
+          await dispatch(createBudget({
+            name: formData.name,
+            totalAmount: parseFloat(formData.amount),
+            month: Number(formData.month),
+            year: Number(formData.year),
+        } as any)).unwrap();
 
       dispatch(addToast({
         type: 'success',
@@ -134,7 +138,7 @@ export const BudgetsPage: React.FC = () => {
                     <div>
                       <p className="text-sm text-gray-600 dark:text-gray-400">Budget total</p>
                       <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        {formatCurrency(budget.amount)}
+                        formatCurrency(budget.totalAmount || budget.amount || 0)
                       </p>
                     </div>
                     <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
