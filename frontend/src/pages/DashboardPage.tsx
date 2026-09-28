@@ -45,10 +45,11 @@ export const DashboardPage: React.FC = () => {
     );
   }
 
-  const totalBudget = activeBudget.amount;
-  const totalSpent = budgetSummary?.totalSpent || 0;
+  const currentBudget = (activeBudget as any)?.budget || activeBudget;
+  const totalBudget = Number(currentBudget?.totalAmount || currentBudget?.amount || 0);
+  const totalSpent = Number(budgetSummary?.totalSpent || 0);
   const totalRemaining = totalBudget - totalSpent;
-  const spentPercentage = (totalSpent / totalBudget) * 100;
+  const spentPercentage = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
 
   return (
     <MainLayout>
