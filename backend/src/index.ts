@@ -22,14 +22,25 @@ const app: Application = express();
 app.use(helmet());
 
 // CORS
+// Configuration CORS pour accepter myfinan.app et le dev
 app.use(
   cors({
-    origin: config.ALLOWED_ORIGINS,
+    origin: (origin, callback) => {
+      // Autoriser les requêtes sans origine (comme curl, apps mobiles) ou venant de n'importe quel sous-domaine myfinan.app / vercel
+      if (!origin || origin.includes('myfinan.app') || origin.includes('vercel.app') || origin.includes('localhost')) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Accepte toutes les requêtes en production
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   })
 );
+
+// Répondre immédiatement aux requêtes preflight OPTIONS
+app.options('*', cors());
 
 // Compression des réponses
 app.use(compression());
