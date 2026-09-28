@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAppSelector } from './hooks/useRedux';
 
 import { MainLayout } from './components/layout/MainLayout';
@@ -24,6 +24,7 @@ export default function App() {
 
   return (
     <Routes>
+      {/* Routes Publiques */}
       <Route
         path="/login"
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />}
@@ -33,23 +34,39 @@ export default function App() {
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterPage />}
       />
 
-      {/* Pages privées avec MainLayout */}
+      {/* Routes Privées avec MainLayout */}
       <Route
-        path="/"
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <MainLayout>
-              <Outlet />
+              <DashboardPage />
             </MainLayout>
           </ProtectedRoute>
         }
-      >
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="budgets" element={<BudgetsPage />} />
-        <Route path="transactions" element={<TransactionsPage />} />
-      </Route>
+      />
+      <Route
+        path="/budgets"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <BudgetsPage />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/transactions"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <TransactionsPage />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
 
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
