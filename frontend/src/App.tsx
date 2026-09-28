@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from './hooks/useRedux';
-import { checkAuth } from './store/slices/authSlice';
+import { useAppSelector } from './hooks/useRedux';
 import MainLayout from './components/layout/MainLayout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
@@ -13,12 +12,7 @@ import Toast from './components/common/Toast';
 import Spinner from './components/common/Spinner';
 
 export default function App() {
-  const dispatch = useAppDispatch();
   const { isAuthenticated, loading } = useAppSelector((state) => state.auth);
-
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, [dispatch]);
 
   if (loading) {
     return (
