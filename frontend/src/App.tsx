@@ -1,22 +1,22 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { useAppSelector } from './hooks/useRedux';
 
-import * as MainLayoutModule from './components/layout/MainLayout';
-import * as ProtectedRouteModule from './components/auth/ProtectedRoute';
-import * as LoginModule from './pages/LoginPage';
-import * as RegisterModule from './pages/RegisterPage';
-import * as DashboardModule from './pages/DashboardPage';
-import * as BudgetsModule from './pages/BudgetsPage';
-import * as TransactionsModule from './pages/TransactionsPage';
+import MainLayoutDefault, * as MainLayoutModule from './components/layout/MainLayout';
+import ProtectedRouteDefault, * as ProtectedRouteModule from './components/auth/ProtectedRoute';
+import LoginPageDefault, * as LoginModule from './pages/LoginPage';
+import RegisterPageDefault, * as RegisterModule from './pages/RegisterPage';
+import DashboardPageDefault, * as DashboardModule from './pages/DashboardPage';
+import BudgetsPageDefault, * as BudgetsModule from './pages/BudgetsPage';
+import TransactionsPageDefault, * as TransactionsModule from './pages/TransactionsPage';
 
-const MainLayout = (MainLayoutModule as any).default || (MainLayoutModule as any).MainLayout || (({ children }: any) => <div>{children}</div>);
-const ProtectedRoute = (ProtectedRouteModule as any).default || (ProtectedRouteModule as any).ProtectedRoute || (({ children }: any) => children);
-const LoginPage = (LoginModule as any).default || (LoginModule as any).LoginPage;
-const RegisterPage = (RegisterModule as any).default || (RegisterModule as any).RegisterPage;
-const DashboardPage = (DashboardModule as any).default || (DashboardModule as any).DashboardPage;
-const BudgetsPage = (BudgetsModule as any).default || (BudgetsModule as any).BudgetsPage;
-const TransactionsPage = (TransactionsModule as any).default || (TransactionsModule as any).TransactionsPage;
+const MainLayout = MainLayoutDefault || (MainLayoutModule as any).MainLayout || (({ children }: any) => <div>{children || <Outlet />}</div>);
+const ProtectedRoute = ProtectedRouteDefault || (ProtectedRouteModule as any).ProtectedRoute || (({ children }: any) => children || <Outlet />);
+const LoginPage = LoginPageDefault || (LoginModule as any).LoginPage;
+const RegisterPage = RegisterPageDefault || (RegisterModule as any).RegisterPage;
+const DashboardPage = DashboardPageDefault || (DashboardModule as any).DashboardPage;
+const BudgetsPage = BudgetsPageDefault || (BudgetsModule as any).BudgetsPage;
+const TransactionsPage = TransactionsPageDefault || (TransactionsModule as any).TransactionsPage;
 
 export default function App() {
   const auth = useAppSelector((state) => state?.auth) || { isAuthenticated: false, loading: false };
@@ -32,17 +32,27 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : (LoginPage ? <LoginPage /> : <div>Page Connexion</div>)} />
-      <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : (RegisterPage ? <RegisterPage /> : <div>Page Inscription</div>)} />
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : (LoginPage ? <LoginPage /> : <div>Connexion</div>)} />
+      <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : (RegisterPage ? <RegisterPage /> : <div>Inscription</div>)} />
       
-      <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+      {/* Pages avec MainLayout */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <Outlet />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={DashboardPage ? <DashboardPage /> : <div>Dashboard</div>} />
-        <Route path="budgets" element={BudgetsPage ? <BudgetsPage /> : <div>Budgets</div>} />
-        <Route path="transactions" element={TransactionsPage ? <TransactionsPage /> : <div>Transactions</div>} />
+        <Route path="dashboard" element={DashboardPage ? <DashboardPage /> : <div className="p-8">Tableau de bord</div>} />
+        <Route path="budgets" element={BudgetsPage ? <BudgetsPage /> : <div className="p-8">Budgets</div>} />
+        <Route path="transactions" element={TransactionsPage ? <TransactionsPage /> : <div className="p-8">Transactions</div>} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }
