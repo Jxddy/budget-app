@@ -1,23 +1,21 @@
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAppSelector } from '../hooks/useRedux';
+import { Navigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks/useRedux';
 
-export const ProtectedRoute: React.FC = () => {
-  const { user, token } = useAppSelector((state) => state.auth);
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
 
-  if (!user || !token) {
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated, loading } = useAppSelector((state) => state.auth);
+
+  if (loading) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  return <Outlet />;
-};
-
-export const PublicRoute: React.FC = () => {
-  const { user, token } = useAppSelector((state) => state.auth);
-
-  if (user && token) {
-    return <Navigate to="/" replace />;
-  }
-
-  return <Outlet />;
-};
+  return <>{children}</>;
+}
