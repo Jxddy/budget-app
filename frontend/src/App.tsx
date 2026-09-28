@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAppSelector } from './hooks/useRedux';
 
-import { MainLayout } from './components/layout/MainLayout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
@@ -34,14 +33,12 @@ export default function App() {
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterPage />}
       />
 
-      {/* Routes Privées avec MainLayout */}
+      {/* Routes Privées */}
       <Route
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <DashboardPage />
-            </MainLayout>
+            <DashboardPage />
           </ProtectedRoute>
         }
       />
@@ -49,9 +46,7 @@ export default function App() {
         path="/budgets"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <BudgetsPage />
-            </MainLayout>
+            <BudgetsPage />
           </ProtectedRoute>
         }
       />
@@ -59,9 +54,7 @@ export default function App() {
         path="/transactions"
         element={
           <ProtectedRoute>
-            <MainLayout>
-              <TransactionsPage />
-            </MainLayout>
+            <TransactionsPage />
           </ProtectedRoute>
         }
       />
