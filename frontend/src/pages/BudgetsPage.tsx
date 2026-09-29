@@ -138,7 +138,7 @@ export const BudgetsPage: React.FC = () => {
                     <div>
                       <p className="text-sm text-gray-600 dark:text-gray-400">Budget total</p>
                       <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        formatCurrency(budget.totalAmount || budget.amount || 0)
+                        {formatCurrency(budget.totalAmount || budget.amount || 0)} 
                       </p>
                     </div>
                     <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
